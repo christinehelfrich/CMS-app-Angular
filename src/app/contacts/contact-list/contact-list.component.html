@@ -1,0 +1,30 @@
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <button class="btn btn-success pull-right" style="top:5rem">New Recipe</button>
+    <h2>Contacts</h2>
+  </div>
+  <div class="panel-body">
+    
+    <div class="row">
+      <div class="col-xs-12">
+        <a
+          href="#"
+          class="list-group-item clearfix"
+          *ngFor="let contact of contacts">
+          <div class="pull-left">
+            <h4 class="list-group-item-heading">{{ contact.name }}</h4>
+  
+          </div>
+          <span class="pull-right">
+
+            <img
+              [src]="contact.imgUrl"
+              alt="{{ contact.imgUrl }}"
+              class="img-responsive"
+              style="max-height: 50px;">
+          </span>
+        </a>
+     
+      </div>
+    </div>
+  </div>
