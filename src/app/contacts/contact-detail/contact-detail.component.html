@@ -6,15 +6,15 @@
             <button class="btn btn-danger ">Delete</button>
         </div>
         <img
-        [src]=""
-        alt="alt"
+        [src]="contact.imgUrl"
+        alt="{{ contact.name }}"
         class="img-responsive"
         style="max-height: 50px;">
 
     </div>
     <div class="panel-body">
-        <strong>Email: </strong>
+        <strong>Email: {{ contact.email }}</strong>
         <br>
-        <strong>Phone: </strong>
+        <strong>Phone: {{ contact.phone }}</strong>
     </div>
   </div>
