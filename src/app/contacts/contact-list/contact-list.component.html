@@ -1,6 +1,6 @@
 <div class="panel panel-default">
   <div class="panel-heading">
-    <button class="btn btn-success pull-right" style="top:5rem">New Recipe</button>
+    <button class="btn btn-success pull-right" style="top:5rem">New Contact</button>
     <h2>Contacts</h2>
   </div>
   <div class="panel-body">
@@ -8,8 +8,9 @@
     <div class="row">
       <div class="col-xs-12">
 <app-contact-item
-*ngFor="let contactEl of contacts"
-[contact]="contactEl">
+*ngFor="let contactEl of contacts; let i = index"
+[contact]="contactEl"
+[index]="i">
 </app-contact-item>
      
       </div>

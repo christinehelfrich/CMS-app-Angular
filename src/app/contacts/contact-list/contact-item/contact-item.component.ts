@@ -11,6 +11,7 @@ import { ContactService } from '../../contact.service';
 })
 export class ContactItemComponent implements OnInit {
   @Input() contact: Contact;
+  @Input() index: number;
 
 
   constructor(private contactService: ContactService) { }
@@ -19,9 +20,12 @@ export class ContactItemComponent implements OnInit {
 
   }
 
+  /*
   onSelected() {
+    console.log(this.contact)
     this.contactService.contactSelected.emit(this.contact);
 
   }
+  */
 
 }
