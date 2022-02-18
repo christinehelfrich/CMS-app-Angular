@@ -15,6 +15,7 @@ export class DocumentDetailComponent implements OnInit {
   document: Document;
   id: number;
   nativeWindow: any;
+  newDocument: Document = new Document('3', 'Mock New Document', "Hey you created a new doc","https://www.youtube.com/watch?v=dQw4w9WgXcQ", [])
 
 
   constructor(private documentService: DocumentService,
@@ -36,6 +37,7 @@ export class DocumentDetailComponent implements OnInit {
   }
 
   onEditDocument() {
+    this.documentService.updateDocument(this.document, this.newDocument)
     this.router.navigate(['edit'], {relativeTo: this.route});
 
   }

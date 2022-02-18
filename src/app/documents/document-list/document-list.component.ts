@@ -1,7 +1,8 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, OnDestroy, EventEmitter } from '@angular/core';
 import { Document } from '../document.model';
 import { DocumentService } from '../document.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 
 @Component({
@@ -12,6 +13,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class DocumentListComponent implements OnInit {
   //@Output() documentWasSelected = new EventEmitter<Document>();
   documents: Document[];
+  private subscription: Subscription;
 
   constructor(private documentService: DocumentService,
             private router: Router,
@@ -21,7 +23,8 @@ export class DocumentListComponent implements OnInit {
 
   ngOnInit(): void {
     this.documents = this.documentService.getDocuments();
-    this.documentService.documentChangedEvent
+    //this.documentService.documentChangedEvent;
+    this.subscription = this.documentService.documentListChangedEvent
     .subscribe(
       (documents: Document[]) => {
         this.documents = documents
@@ -31,8 +34,14 @@ export class DocumentListComponent implements OnInit {
   }
 
 
-  onNewRecipe() {
-    this.router.navigate(['new'], {relativeTo: this.route})
+  onNewDocument() {
+    this.router.navigate(['new'], {relativeTo: this.route});
+    const newDocument = new Document('3', 'Mock New Document', "Hey you created a new doc","https://www.youtube.com/watch?v=dQw4w9WgXcQ", [])
+    this.documentService.addDocument(newDocument);
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 /*
   onDocumentSelected(document: Document) {
