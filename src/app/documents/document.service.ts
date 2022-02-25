@@ -9,6 +9,7 @@ import { MOCKDOCUMENTS } from "./MOCKDOCUMENTS";
 @Injectable()
 export class DocumentService {
     documentListChangedEvent = new Subject<Document[]>();
+    startedEditing = new Subject<number>();
     @Output() documentSelected = new EventEmitter<Document>();
     @Output() documentChangedEvent = new EventEmitter<Document[]>();
 
@@ -27,7 +28,7 @@ export class DocumentService {
         return this.documents[index];
     }
 
-    getDocument(id: string): Document {
+    getDocument(id): Document {
         this.documents.forEach(document => {
             if (document.id) {
                 return document

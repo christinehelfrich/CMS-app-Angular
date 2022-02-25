@@ -32,7 +32,7 @@ export class ContactDetailComponent implements OnInit {
 
 
   onEditContact() {
-    this.contactService.updateContact(this.contact, this.newContact)
+    //this.contactService.updateContact(this.contact, this.newContact)
     this.router.navigate(['edit'], {relativeTo: this.route});
 
   }

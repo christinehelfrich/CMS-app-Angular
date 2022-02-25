@@ -36,8 +36,8 @@ export class DocumentListComponent implements OnInit {
 
   onNewDocument() {
     this.router.navigate(['new'], {relativeTo: this.route});
-    const newDocument = new Document('3', 'Mock New Document', "Hey you created a new doc","https://www.youtube.com/watch?v=dQw4w9WgXcQ", [])
-    this.documentService.addDocument(newDocument);
+    //const newDocument = new Document('3', 'Mock New Document', "Hey you created a new doc","https://www.youtube.com/watch?v=dQw4w9WgXcQ", [])
+    //this.documentService.addDocument(newDocument);
   }
 
   ngOnDestroy(): void {
