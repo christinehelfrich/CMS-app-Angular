@@ -2,6 +2,7 @@ import { EventEmitter, Output, Injectable } from "@angular/core";
 import { Subject } from "rxjs";
 import { Contact } from "./contact.model";
 import {MOCKCONTACTS} from './MOCKCONTACTS';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 
 
@@ -14,12 +15,27 @@ export class ContactService {
 
     private contacts: Contact[] = [];
     maxContactId: number;
-    constructor() {
+    constructor(private http: HttpClient) {
         this.contacts = MOCKCONTACTS;
         this.maxContactId = this.getMaxId(this.contacts)
      }
-      getContacts() {
-          return this.contacts.slice();
+      getContacts() {  
+        let contacts: Contact[] = [];
+        this.http
+        .get<Contact[]>(
+            "https://cms-backend-2155e-default-rtdb.firebaseio.com/contacts.json"
+        )
+        .subscribe(
+            (contacts: Contact[] ) => {
+                this.contacts = contacts;
+                this.maxContactId = this.getMaxId(this.contacts)
+                this.contacts.sort()
+                this.contactListChangedEvent.next(this.contacts)
+            }
+            
+            
+        )
+        return this.contacts
       }
 
       getTheContact(index: number) {
@@ -40,6 +56,25 @@ export class ContactService {
           return contact;
       }
 
+      storeContacts() {
+        let contacts = JSON.stringify(this.contacts);
+        const headers = new HttpHeaders()
+            .set('content-type', 'application/json')
+            .set('Access-Control-Allow-Origin', '*');
+        this.http
+            .put(
+              'https://cms-backend-2155e-default-rtdb.firebaseio.com/contacts.json',
+              contacts, {
+                  headers: {'header1': 'content-type', 'header2':'application/json', 'header3': 'Access-Control-Allow-Origin', 'header4': '*'}
+              }
+            )
+            .subscribe(response => {
+              this.contactListChangedEvent.next(this.contacts);
+            });
+
+    }
+
+
 
       deleteContact(contact: Contact) {
         if (!contact) {
@@ -51,7 +86,7 @@ export class ContactService {
         }
         this.contacts.splice(pos, 1);
         let contactsListClone = this.contacts.slice()
-        this.contactListChangedEvent.next(contactsListClone)
+        this.storeContacts();
      }
 
      addContact(newContact: Contact) {
@@ -68,7 +103,7 @@ export class ContactService {
              console.log(contactsListClone)
          }
          //console.log(contactsListClone)
-         this.contactListChangedEvent.next(contactsListClone)
+         this.storeContacts();
      }
 
      updateContact(originalContact: Contact, newContact: Contact) {
@@ -78,7 +113,7 @@ export class ContactService {
                newContact.id = originalContact.id;
                this.contacts[pos] = newContact;
                let contactsListClone = this.contacts.slice();
-               this.contactListChangedEvent.next(contactsListClone)
+               this.storeContacts();
            }
            else {
                console.log("index of contact is less than 0: " + pos)

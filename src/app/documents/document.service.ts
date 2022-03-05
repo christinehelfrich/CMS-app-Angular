@@ -1,6 +1,8 @@
 import { EventEmitter, Output, Injectable } from "@angular/core";
 import { Subject } from "rxjs";
 
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+
 import { Document } from "./document.model";
 
 import { MOCKDOCUMENTS } from "./MOCKDOCUMENTS";
@@ -15,13 +17,48 @@ export class DocumentService {
 
     private documents: Document[] = []; 
     maxDocumentId: number;
-    constructor() {
+    constructor(private http: HttpClient) {
         this.documents = MOCKDOCUMENTS;
         this.maxDocumentId = this.getMaxId(this.documents);
      }
 
+
      getDocuments() {
-        return this.documents.slice();
+        let documents: Document[] = [];
+        this.http
+        .get<Document[]>(
+            "https://cms-backend-2155e-default-rtdb.firebaseio.com/documents.json"
+        )
+        .subscribe(
+            (documents: Document[] ) => {
+                this.documents = documents;
+                this.maxDocumentId = this.getMaxId(this.documents)
+                this.documents.sort()
+                this.documentListChangedEvent.next(this.documents)
+            }
+            
+            
+        )
+        return this.documents
+        
+    }
+
+    storeDocuments() {
+        let documents = JSON.stringify(this.documents);
+        const headers = new HttpHeaders()
+            .set('content-type', 'application/json')
+            .set('Access-Control-Allow-Origin', '*');
+        this.http
+            .put(
+              'https://cms-backend-2155e-default-rtdb.firebaseio.com/documents.json',
+              documents, {
+                  headers: {'header1': 'content-type', 'header2':'application/json', 'header3': 'Access-Control-Allow-Origin', 'header4': '*'}
+              }
+            )
+            .subscribe(response => {
+              this.documentListChangedEvent.next(this.documents);
+            });
+
     }
 
     getTheDocument(index: number) {
@@ -50,7 +87,7 @@ export class DocumentService {
         }
         this.documents.splice(pos, 1);
         let documentsListClone = this.documents.slice()
-        this.documentListChangedEvent.next(documentsListClone)
+        this.storeDocuments();
      }
 
      addDocument(newDocument: Document) {
@@ -68,7 +105,7 @@ export class DocumentService {
              //console.log(documentsListClone)
          }
 
-         this.documentListChangedEvent.next(documentsListClone);
+         this.storeDocuments()
      }
 
      updateDocument(originalDocument: Document, newDocument: Document) {
@@ -78,7 +115,7 @@ export class DocumentService {
                 newDocument.id = originalDocument.id;
                 this.documents[pos] = newDocument;
                 let documentsListClone = this.documents.slice();
-                this.documentListChangedEvent.next(documentsListClone)
+                this.storeDocuments()
             }
             else {
                 console.log("index of doc is less than 0: " + pos)
