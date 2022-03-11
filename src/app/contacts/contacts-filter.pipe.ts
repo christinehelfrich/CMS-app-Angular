@@ -20,7 +20,6 @@ export class ContactsFilterPipe implements PipeTransform {
           filteredContacts.push(contact)
         }
       })
-
       /*
       filteredContacts = contacts.filter(
         (contact:Contact) => {
@@ -33,7 +32,6 @@ export class ContactsFilterPipe implements PipeTransform {
     if (filteredContacts.length < 1) {
       return contacts;
     }
-    console.log(filteredContacts);
     return filteredContacts;
 
   }
