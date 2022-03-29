@@ -6,7 +6,6 @@ import {
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { NgForm } from '@angular/forms';
-
 import { DocumentService } from '../document.service';
 import { Document } from '../document.model';
 
@@ -42,7 +41,9 @@ export class DocumentEditComponent implements OnInit {
       (params: Params) => {
         this.id = params['id'];
         if (this.id !== undefined) {
-          this.originalDocument = this.documentService.getTheDocument(this.id);
+          console.log(this.id)
+          this.originalDocument = this.documentService.getDocument(this.id);
+          console.log(this.originalDocument)
  
         }
         else {
@@ -50,10 +51,13 @@ export class DocumentEditComponent implements OnInit {
 
           return
         }
+        console.log(this.editMode)
 
         if (this.originalDocument !== null || undefined || "") {
           //console.log(params['id'])
           this.editMode = true;
+  
+          
           this.document = JSON.parse(JSON.stringify(this.originalDocument));
           //console.log("the original doc is not null or undefined. original doc: " + this.originalDocument)
         }
@@ -75,7 +79,7 @@ export class DocumentEditComponent implements OnInit {
   onSubmit(form: NgForm) {
     const value = form.value;
     const newId = String(this.id)
- 
+    console.log(this.editMode)
     const newDocument = new Document(    
       newId,  
       form.value.name,
@@ -85,9 +89,12 @@ export class DocumentEditComponent implements OnInit {
       );
 
     if (this.editMode == true) {
-      this.documentService.updateDocument(this.originalDocument, newDocument)
+      console.log(this.editMode)
+      console.log(`editcomp id =  ${this.id}`)
+      this.documentService.updateDocument(this.originalDocument, newDocument, this.id)
     }
     else {
+      console.log(this.editMode)
       this.documentService.addDocument(newDocument);
       //this.router.navigate(['new'], {relativeTo: this.route});
 

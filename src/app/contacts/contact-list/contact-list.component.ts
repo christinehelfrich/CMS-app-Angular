@@ -19,12 +19,13 @@ export class ContactListComponent implements OnInit {
               private route: ActivatedRoute) { }
 
   ngOnInit() {
-    this.contacts = this.contactService.getContacts();
+    this.contactService.getContacts();
     //this.contactService.contactChangedEvent
     this.subscription = this.contactService.contactListChangedEvent
     .subscribe(
       (contacts: Contact[]) => {
         this.contacts = contacts
+        console.log(contacts)
       }
     )
   }

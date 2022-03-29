@@ -22,12 +22,12 @@ export class DocumentListComponent implements OnInit {
             }
 
   ngOnInit(): void {
-    this.documents = this.documentService.getDocuments();
-    //this.documentService.documentChangedEvent;
+    this.documentService.getDocuments();
     this.subscription = this.documentService.documentListChangedEvent
     .subscribe(
       (documents: Document[]) => {
         this.documents = documents
+        
       }
     )
 

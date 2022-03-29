@@ -4,6 +4,7 @@ import { DocumentService } from '../document.service';
 import { WindRefService } from 'src/app/wind-ref.service';
 
 import { Document } from '../document.model';
+import { Subscription } from 'rxjs';
 //import { relative } from 'path';
 
 @Component({
@@ -15,6 +16,8 @@ export class DocumentDetailComponent implements OnInit {
   document: Document;
   id: number;
   nativeWindow: any;
+  private subscription: Subscription
+  documents: Document[];
   newDocument: Document = new Document('3', 'Mock New Document', "Hey you created a new doc","https://www.youtube.com/watch?v=dQw4w9WgXcQ", [])
 
 
@@ -30,8 +33,8 @@ export class DocumentDetailComponent implements OnInit {
     this.route.params
     .subscribe(
       (params: Params) => {
-        this.id = params['id'];
-        this.document = this.documentService.getTheDocument(this.id);
+        this.id = params.id;
+        this.document = this.documentService.getDocument(this.id)
       }
     )
   }

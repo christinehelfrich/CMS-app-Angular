@@ -44,7 +44,7 @@ export class ContactEditComponent implements OnInit {
       (params: Params) => {
         this.id = params['id'];
         if (this.id !== undefined) {
-          this.originalContact = this.contactService.getTheContact(this.id);
+          this.originalContact = this.contactService.getContact(String(this.id));
  
         }
         else {
@@ -77,6 +77,7 @@ export class ContactEditComponent implements OnInit {
   onSubmit(form: NgForm) {
     const value = form.value;
     const newId = String(this.id)
+    console.log(value)
 
     const newContact = new Contact(
       newId,
@@ -88,10 +89,14 @@ export class ContactEditComponent implements OnInit {
     )
     
     if (this.editMode == true) {
-      this.contactService.updateContact(this.originalContact, newContact)
+      this.contactService.updateContact(this.originalContact, newContact, this.id)
+      //console.log(this.id)
+      //console.log(this.originalContact)
+      //console.log(this.originalContact)
     }
     else {
       this.contactService.addContact(newContact);
+      console.log('new contact???')
       //this.router.navigate(['new'], {relativeTo: this.route});
 
     }

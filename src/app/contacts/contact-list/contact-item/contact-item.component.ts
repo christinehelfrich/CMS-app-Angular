@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
-
+import { ActivatedRoute, Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 import { Contact } from '../../contact.model';
 import { ContactService } from '../../contact.service';
@@ -12,12 +13,25 @@ import { ContactService } from '../../contact.service';
 export class ContactItemComponent implements OnInit {
   @Input() contact: Contact;
   @Input() index: number;
+  contacts: Contact[]
+  private subscription: Subscription;
+  constructor(private contactService: ContactService,
+    private router: Router,
+    private route: ActivatedRoute) { 
 
+    }
 
-  constructor(private contactService: ContactService) { }
 
   ngOnInit(): void {
-
+    this.contactService.getContacts();
+    this.subscription = this.contactService.contactListChangedEvent
+    .subscribe(
+      (contacts: Contact[]) => {
+        this.contacts = contacts
+        console.log(this.contacts)
+        
+      }
+    )
   }
 
   /*

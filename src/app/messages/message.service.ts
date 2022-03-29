@@ -1,5 +1,6 @@
 import { EventEmitter, Output, Injectable } from "@angular/core";
 import { Message } from "./message-model";
+import { map } from 'rxjs/operators';
 import {MOCKMESSAGES} from './MOCKMESSAGES';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
@@ -15,9 +16,19 @@ export class MessageService {
       getMessages() {
         let messages: Message[] = [];
         this.http
-        .get<Message[]>(
-            "https://cms-backend-2155e-default-rtdb.firebaseio.com/messages.json"
+        .get<{message: string; messages: any}>(
+            "http://localhost:3000/messages"
         )
+        .pipe(map((messageData) => {
+            return messageData.messages.map(message => {
+                return {
+                    subject: message.subject,
+                    msgText: message.msgText,
+                    id: message._id,
+                    sender: message.sender
+                }
+            })
+        }))
         .subscribe(
             (messages: Message[] ) => {
                 this.messages = messages;
